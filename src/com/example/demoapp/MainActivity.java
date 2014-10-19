@@ -3,6 +3,7 @@ package com.example.demoapp;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.parse.DeleteCallback;
 import com.parse.FindCallback;
 import com.parse.Parse;
 import com.parse.ParseException;
@@ -16,6 +17,8 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemLongClickListener;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
@@ -32,6 +35,7 @@ public class MainActivity extends Activity {
 	private ListView listView;
 	private ProgressBar progressBar;
 	private String nickname;
+	private List<ParseObject> messages;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -71,6 +75,24 @@ public class MainActivity extends Activity {
 		textView.setText(nickname);
 
 		loadDataFromParse();
+		listView.setOnItemLongClickListener(new OnItemLongClickListener() {
+
+			@Override
+			public boolean onItemLongClick(AdapterView<?> adapter, 
+					View view,
+					int position, 
+					long id) {
+				messages.get(position).deleteInBackground(new DeleteCallback() {
+					
+					@Override
+					public void done(ParseException e) {
+						loadDataFromParse();
+					}
+				});
+				return false;
+			}
+		});
+
 	}
 
 	private void loadDataFromParse() {
@@ -83,6 +105,8 @@ public class MainActivity extends Activity {
 
 			@Override
 			public void done(List<ParseObject> objects, ParseException e) {
+				messages = objects;
+				
 				progressBar.setVisibility(View.GONE);
 				listView.setVisibility(View.VISIBLE);
 
