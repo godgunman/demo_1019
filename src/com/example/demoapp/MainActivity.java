@@ -1,5 +1,8 @@
 package com.example.demoapp;
 
+import com.parse.Parse;
+import com.parse.ParseObject;
+
 import android.app.Activity;
 import android.os.Bundle;
 import android.view.Menu;
@@ -20,6 +23,9 @@ public class MainActivity extends Activity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
 
+		Parse.initialize(this, "3OCZf9uNBUQG10wV7LnHViaXxHYvASPAvOaKdb23",
+				"LNS4stNuomBtZqUQQNeeQQ2WQHtHV7mxz9FUAjp4");
+
 		editText = (EditText) findViewById(R.id.editText1);
 		button = (Button) findViewById(R.id.button1);
 
@@ -28,9 +34,12 @@ public class MainActivity extends Activity {
 			@Override
 			public void onClick(View v) {
 				String text = editText.getText().toString();
-				Toast
-				.makeText(MainActivity.this, text, Toast.LENGTH_SHORT)
-				.show();
+				Toast.makeText(MainActivity.this, text, Toast.LENGTH_SHORT)
+						.show();
+
+				ParseObject testObject = new ParseObject("Message");
+				testObject.put("text", text);
+				testObject.saveInBackground();
 			}
 		});
 	}
