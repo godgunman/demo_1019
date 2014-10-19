@@ -8,6 +8,7 @@ import com.parse.FindCallback;
 import com.parse.Parse;
 import com.parse.ParseException;
 import com.parse.ParseObject;
+import com.parse.ParsePush;
 import com.parse.ParseQuery;
 import com.parse.SaveCallback;
 
@@ -44,9 +45,6 @@ public class MainActivity extends Activity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
 
-		Parse.initialize(this, "3OCZf9uNBUQG10wV7LnHViaXxHYvASPAvOaKdb23",
-				"LNS4stNuomBtZqUQQNeeQQ2WQHtHV7mxz9FUAjp4");
-
 		textView = (TextView) findViewById(R.id.textView1);
 		editText = (EditText) findViewById(R.id.editText1);
 		button = (Button) findViewById(R.id.button1);
@@ -70,6 +68,11 @@ public class MainActivity extends Activity {
 						loadDataFromParse();
 					}
 				});
+
+				ParsePush push = new ParsePush();
+				push.setChannel("all");
+				push.setMessage(text);
+				push.sendInBackground();
 			}
 		});
 
@@ -80,12 +83,10 @@ public class MainActivity extends Activity {
 		listView.setOnItemLongClickListener(new OnItemLongClickListener() {
 
 			@Override
-			public boolean onItemLongClick(AdapterView<?> adapter, 
-					View view,
-					int position, 
-					long id) {
+			public boolean onItemLongClick(AdapterView<?> adapter, View view,
+					int position, long id) {
 				messages.get(position).deleteInBackground(new DeleteCallback() {
-					
+
 					@Override
 					public void done(ParseException e) {
 						loadDataFromParse();
@@ -108,7 +109,7 @@ public class MainActivity extends Activity {
 			@Override
 			public void done(List<ParseObject> objects, ParseException e) {
 				messages = objects;
-				
+
 				progressBar.setVisibility(View.GONE);
 				listView.setVisibility(View.VISIBLE);
 

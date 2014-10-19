@@ -1,5 +1,9 @@
 package com.example.demoapp;
 
+import com.parse.Parse;
+import com.parse.ParseInstallation;
+import com.parse.ParsePush;
+
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
@@ -20,6 +24,11 @@ public class LoginActivity extends Activity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_login);
 
+		Parse.initialize(this, "3OCZf9uNBUQG10wV7LnHViaXxHYvASPAvOaKdb23",
+				"LNS4stNuomBtZqUQQNeeQQ2WQHtHV7mxz9FUAjp4");
+		ParseInstallation.getCurrentInstallation().saveInBackground();
+		ParsePush.subscribeInBackground("all");
+		
 		editText = (EditText) findViewById(R.id.editText1);
 		button = (Button) findViewById(R.id.button1);
 
