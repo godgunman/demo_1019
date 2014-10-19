@@ -21,10 +21,12 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.ProgressBar;
+import android.widget.TextView;
 import android.widget.Toast;
 
 public class MainActivity extends Activity {
 
+	private TextView textView;
 	private EditText editText;
 	private Button button;
 	private ListView listView;
@@ -38,11 +40,12 @@ public class MainActivity extends Activity {
 		Parse.initialize(this, "3OCZf9uNBUQG10wV7LnHViaXxHYvASPAvOaKdb23",
 				"LNS4stNuomBtZqUQQNeeQQ2WQHtHV7mxz9FUAjp4");
 
+		textView = (TextView) findViewById(R.id.textView1);
 		editText = (EditText) findViewById(R.id.editText1);
 		button = (Button) findViewById(R.id.button1);
 		listView = (ListView) findViewById(R.id.listView1);
-		progressBar	= (ProgressBar) findViewById(R.id.progressBar1);
-		
+		progressBar = (ProgressBar) findViewById(R.id.progressBar1);
+
 		button.setOnClickListener(new OnClickListener() {
 
 			@Override
@@ -54,7 +57,7 @@ public class MainActivity extends Activity {
 				ParseObject testObject = new ParseObject("Message");
 				testObject.put("text", text);
 				testObject.saveInBackground(new SaveCallback() {
-					
+
 					@Override
 					public void done(ParseException e) {
 						loadDataFromParse();
@@ -63,13 +66,16 @@ public class MainActivity extends Activity {
 			}
 		});
 
+		String nickname = getIntent().getStringExtra("nickname");
+		textView.setText(nickname);
+
 		loadDataFromParse();
 	}
 
 	private void loadDataFromParse() {
 		listView.setVisibility(View.INVISIBLE);
 		progressBar.setVisibility(View.VISIBLE);
-		
+
 		ParseQuery<ParseObject> query = new ParseQuery<ParseObject>("Message");
 		query.findInBackground(new FindCallback<ParseObject>() {
 
@@ -77,16 +83,15 @@ public class MainActivity extends Activity {
 			public void done(List<ParseObject> objects, ParseException e) {
 				progressBar.setVisibility(View.GONE);
 				listView.setVisibility(View.VISIBLE);
-				
+
 				List<String> data = new ArrayList<String>();
 				for (ParseObject object : objects) {
-					String text =object.getString("text");
+					String text = object.getString("text");
 					data.add(text);
 				}
-				ArrayAdapter<String> adapter = 
-						new ArrayAdapter<String>(MainActivity.this, 
-								android.R.layout.simple_list_item_1, 
-								data);
+				ArrayAdapter<String> adapter = new ArrayAdapter<String>(
+						MainActivity.this, android.R.layout.simple_list_item_1,
+						data);
 				listView.setAdapter(adapter);
 			}
 		});
