@@ -31,6 +31,7 @@ public class MainActivity extends Activity {
 	private Button button;
 	private ListView listView;
 	private ProgressBar progressBar;
+	private String nickname;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -50,7 +51,7 @@ public class MainActivity extends Activity {
 
 			@Override
 			public void onClick(View v) {
-				String text = editText.getText().toString();
+				String text = nickname + " : " + editText.getText().toString();
 				Toast.makeText(MainActivity.this, text, Toast.LENGTH_SHORT)
 						.show();
 
@@ -66,7 +67,7 @@ public class MainActivity extends Activity {
 			}
 		});
 
-		String nickname = getIntent().getStringExtra("nickname");
+		nickname = getIntent().getStringExtra("nickname");
 		textView.setText(nickname);
 
 		loadDataFromParse();
@@ -77,6 +78,7 @@ public class MainActivity extends Activity {
 		progressBar.setVisibility(View.VISIBLE);
 
 		ParseQuery<ParseObject> query = new ParseQuery<ParseObject>("Message");
+		query.orderByDescending("createdAt");
 		query.findInBackground(new FindCallback<ParseObject>() {
 
 			@Override
@@ -111,7 +113,8 @@ public class MainActivity extends Activity {
 		// automatically handle clicks on the Home/Up button, so long
 		// as you specify a parent activity in AndroidManifest.xml.
 		int id = item.getItemId();
-		if (id == R.id.action_settings) {
+		if (id == R.id.action_refresh) {
+			loadDataFromParse();
 			return true;
 		}
 		return super.onOptionsItemSelected(item);
