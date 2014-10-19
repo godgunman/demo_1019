@@ -32,6 +32,6 @@ A demo app for tech talk at NTHU.
 * 將專案執行在裝置上（實體手機或者是模擬器）
 	1. 對專案按右鍵 -> Run As -> Android Application 
 
-![step1_1](http://i.imgur.com/a2a2b1b.png =250x)
+<!-- ![step1_1](http://i.imgur.com/a2a2b1b.png =250x)
 ![step1_2](http://i.imgur.com/JJHpfYA.png =250x)
-		 
+		 -->
